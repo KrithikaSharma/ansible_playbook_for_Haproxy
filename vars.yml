@@ -1,0 +1,4 @@
+port_no: "5050"
+
+dvd_dir: "/dvd1"
+d_root: "/var/www/html"

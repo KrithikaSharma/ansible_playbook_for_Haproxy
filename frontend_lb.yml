@@ -1,0 +1,36 @@
+- hosts: frontend
+  vars_files:
+          vars.yml
+  tasks:
+  - name: "installing haproxy software"
+    package:
+            name: "haproxy"
+            state: present
+
+  - name: "setting up configuration file"
+    template:
+            src: "/etc/ansible/haproxy.cfg"
+            dest: "/etc/haproxy/haproxy.cfg"
+
+  - name: "starting the firewalld services"
+    service:
+            name: "firewalld"
+            state: started
+
+  - name: "exposing the port of proxy"
+    firewalld:
+            port: "{{ port_no }}/tcp"
+            state: enabled
+            permanent: yes
+            immediate: yes
+
+  - name: " disabling selinux"
+    shell: "setenforce 0"
+
+
+  - name: "starting service"
+    service:
+            name: "haproxy"
+            state: started
+            enabled: yes
+   
